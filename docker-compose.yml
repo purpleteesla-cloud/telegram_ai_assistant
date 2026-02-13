@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # Наш "мозг" — API Gateway
+  api_gateway:
+    build: .
+    container_name: ai_api_gateway
+    command: python api_gateway.py
+    restart: always
+    env_file:
+      - .env
+    # Если твой API слушает порт (например 8000), пробросим его
+    ports:
+      - "8000:8000"
+
+  # Наш интерфейс — Telegram Bot
+  telegram_bot:
+    build: .
+    container_name: ai_telegram_bot
+    command: python telegram_bot.py
+    restart: always
+    env_file:
+      - .env
+    # Бот будет ждать, пока запустится "мозг"
+    depends_on:
+      - api_gateway
