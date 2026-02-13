@@ -14,4 +14,7 @@
 
 ### 🚀 Як запустити:
 1. Налаштувати `.env` з вашими токенами.
-2. Написати @nesysadmin
+2. В коде telegram_bot.py - API с http://127.0.0.1:8000 на http://api_gateway:8000.
+3. git clone https://github.com/purpleteesla-cloud/telegram_ai_assistant.git
+4. Створіть файл .env на основі .env.example та вкажіть ваші ключі API
+5. docker-compose up -d --build
