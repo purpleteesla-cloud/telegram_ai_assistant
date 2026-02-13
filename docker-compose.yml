@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Наш "мозг" — API Gateway
+  # Наш "мозг" и база данных — API Gateway
   api_gateway:
     build: .
     container_name: ai_api_gateway
@@ -9,9 +9,13 @@ services:
     restart: always
     env_file:
       - .env
-    # Если твой API слушает порт (например 8000), пробросим его
     ports:
       - "8000:8000"
+    volumes:
+      # Мапим папку с базой данных ChromaDB, чтобы данные не пропадали
+      - ./chroma_db:/app/chroma_db
+      # Мапим папку с логами или документами для RAG
+      - ./documents:/app/documents
 
   # Наш интерфейс — Telegram Bot
   telegram_bot:
@@ -21,6 +25,8 @@ services:
     restart: always
     env_file:
       - .env
-    # Бот будет ждать, пока запустится "мозг"
     depends_on:
       - api_gateway
+    volumes:
+      # Прокидываем код, чтобы изменения подхватывались без пересборки (для тестов)
+      - .:/app
